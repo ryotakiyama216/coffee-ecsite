@@ -14,13 +14,16 @@ import {
   normalizeEmail,
   saveOrders,
 } from "@/lib/auth";
-import { CartItem, normalizeCart } from "@/lib/cart";
+import { CartItem, Grind, normalizeCart } from "@/lib/cart";
 
-const GRIND_OPTIONS = ["Beans", "Medium", "Fine"] as const;
-type Grind = (typeof GRIND_OPTIONS)[number];
+const GRIND_OPTIONS: ReadonlyArray<{ value: Grind; label: string }> = [
+  { value: "豆", label: "Beans" },
+  { value: "中挽き", label: "Medium" },
+  { value: "細挽き", label: "Fine" },
+];
 export default function ProductDetailPage({ params }: { params: { id: string } }) {
   const [message, setMessage] = useState("Add items from this product page.");
-  const [selectedGrind, setSelectedGrind] = useState<Grind>("Beans");
+  const [selectedGrind, setSelectedGrind] = useState<Grind>("豆");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartLoaded, setIsCartLoaded] = useState(false);
 
@@ -163,15 +166,15 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 <div className="mt-2 flex gap-2">
                   {GRIND_OPTIONS.map((grind) => (
                     <button
-                      key={grind}
-                      onClick={() => setSelectedGrind(grind)}
+                      key={grind.value}
+                      onClick={() => setSelectedGrind(grind.value)}
                       className={`rounded-md border px-3 py-2 text-xs transition ${
-                        selectedGrind === grind
+                        selectedGrind === grind.value
                           ? "border-[#f2b880] bg-[#d99152] text-[#2f1f17]"
                           : "border-[#80573e] text-[#f2dbc1] hover:bg-[#5a3929]"
                       }`}
                     >
-                      {grind}
+                      {grind.label}
                     </button>
                   ))}
                 </div>
